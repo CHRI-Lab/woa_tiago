@@ -54,7 +54,7 @@ class GenerationFuncion():
         self.show_around = ShowAround()
         self.turn_around = HalfTurn()
 
-        self.follow_person_pub = rospy.Publisher('/follow_person_flag', Bool, queue_size=1)
+        # self.follow_person_pub = rospy.Publisher('/follow_person_flag', Bool, queue_size=1)
         self.bool_msg = Bool()
         
 
@@ -77,19 +77,20 @@ class GenerationFuncion():
             rospy.loginfo("Start generate by gpt")
             # keyword_list= ['no_action', 'stress_ball', 'breathing_exercise', 'provide_snack', 'schedule_meeting', 'navigate_to_meeting_room_A', 'navigate_to_meeting_room_B', 'navigate_to_kitchen', 'say_hi_wave_hand']
             keyword_list= ['no_action', 'stress_ball', 'breathing_exercise', 'provide_snack', 'schedule_meeting', 'navigate_to_meeting_room', 'navigate_to_kitchen', 'say_hi_wave_hand']
+            keyword_list= ['no_action', 'stress_ball', 'breathing_exercise', 'provide_snack', 'say_hi_wave_hand']
             gpt_response = openai.chat.completions.create(
                 model="gpt-4",  # Use the model identifier for GPT-4. Adjust if you're using a specific variant.
                 messages=[{"role": "system", "content": 
-                           "You are a helpful office assistant robot. Your name is Tiago and you are Australian. You can assist with office work and maintain a relaxed vibe. \
-                           Now in are in a real office environment that people are piloting with you as you're a new office assistant to them."
+                           "You are a helpful conference assistant robot. Your name is Tiago and you are Australian. You can assist with conference attendance and maintain a relaxed vibe. \
+                           Now in are in a real conference venue that people are very interest in you and want you to show your skills."
                            }, 
                           {"role": "user", "content": 
                            f"{text}. \
                            Note: Please respond with proper natural language and provide a keyword after a * sign, without a period mark.\
                            The keyword should be chosen from this keyword list: [{keyword_list}]\
-                           If the keyword is 'no_action', please give some natural response.\
+                           If the keyword is 'no_action', please give some natural response, like casual chats or make jokes on it.\
                            If the keyword isn't 'no_action', only propose to do the action, don't introduce the detail of the action in the natural language response.\
-                           For example: Sure, come with me. *navigate_to_meeting_room_a\
+                           For example: Do you want some snack? Here you go. *provide_snack\
                            Another example: I can help you to relax, let's do a breathing exercise. *breathing_exercise\
                            "}],
             )
@@ -105,8 +106,9 @@ class GenerationFuncion():
             # self.speak.text_to_speech(robot_response, 1.0)
             if action_keyword != "no_action":
                 
-                self.bool_msg.data = False
-                self.follow_person_pub.publish(self.bool_msg)
+                # self.bool_msg.data = False
+                self.bool_msg.data = True # no limitation on interaction times
+                # self.follow_person_pub.publish(self.bool_msg)
 
                 if action_keyword == "breathing_exercise":
                     if breathing_flag == True:
@@ -141,38 +143,38 @@ class GenerationFuncion():
                         text = "Oh, the stress ball is already in your hand"
                         self.tts(text)
 
-                # elif action_keyword == "say_hi_wave_hand":
-                #     rospy.loginfo("Doing a wave")
-                #     play_action('wave')
-                #     play_action('home')
+                elif action_keyword == "say_hi_wave_hand":
+                    rospy.loginfo("Doing a wave")
+                    play_action('wave')
+                    play_action('home')
 
-                elif action_keyword == "schedule_meeting":
-                    if schedule_flag == True:
-                        rospy.loginfo("Doing schedule a meeting")
-                        self.turn_around.run()
-                        # create_event_calendar()
-                        event_creator = EventCalendarCreator()
-                        # # event_creator.create_event_calendar()
-                        self.turn_around.run()
-                        schedule = event_creator.get_event_data()
-                        # schedule = Showing_Events_Calender()
-                        rospy.loginfo(schedule)
-                        self.tts(schedule)
-                        # self.speak.text_to_speech(schedule, 1.2)
-                        schedule_flag = False
+                # elif action_keyword == "schedule_meeting":
+                #     if schedule_flag == True:
+                #         rospy.loginfo("Doing schedule a meeting")
+                #         self.turn_around.run()
+                #         # create_event_calendar()
+                #         event_creator = EventCalendarCreator()
+                #         # # event_creator.create_event_calendar()
+                #         self.turn_around.run()
+                #         schedule = event_creator.get_event_data()
+                #         # schedule = Showing_Events_Calender()
+                #         rospy.loginfo(schedule)
+                #         self.tts(schedule)
+                #         # self.speak.text_to_speech(schedule, 1.2)
+                #         schedule_flag = False
 
-                    else:
-                        rospy.loginfo("no more schedule")
-                        text = "But, relax. You had enough meeting today."
-                        self.tts(text)
+                #     else:
+                #         rospy.loginfo("no more schedule")
+                #         text = "But, relax. You had enough meeting today."
+                #         self.tts(text)
 
                 
-                elif action_keyword == "navigate_to_meeting_room":
-                    rospy.loginfo("Show meeting room")
-                    self.follow_me.run()
-                    self.navigation.run("ux_room_a_inside")
-                    text = "This is the meeting room. You can have a meeting here."
-                    self.show_around.run(text)
+                # elif action_keyword == "navigate_to_meeting_room":
+                #     rospy.loginfo("Show meeting room")
+                #     self.follow_me.run()
+                #     self.navigation.run("ux_room_a_inside")
+                #     text = "This is the meeting room. You can have a meeting here."
+                #     self.show_around.run(text)
 
                 # elif action_keyword == "navigate_to_meeting_room_A":
                 #     rospy.loginfo("Show meeting room A")
@@ -188,17 +190,17 @@ class GenerationFuncion():
                 #     text = "This is the meeting room B. You can have a meeting here."
                 #     self.show_around.run(text)
 
-                elif action_keyword == "navigate_to_kitchen":
-                    rospy.loginfo("Show kitchen")
-                    self.follow_me.run()
-                    self.navigation.run("ux_kitchen")
-                    text = "This is the kitchen. Help yourself to a cup of coffee."
-                    self.show_around.run(text)
-                else:
-                    rospy.loginfo("Wrong keyword.")
+                # elif action_keyword == "navigate_to_kitchen":
+                #     rospy.loginfo("Show kitchen")
+                #     self.follow_me.run()
+                #     self.navigation.run("ux_kitchen")
+                #     text = "This is the kitchen. Help yourself to a cup of coffee."
+                #     self.show_around.run(text)
+                # else:
+                #     rospy.loginfo("Wrong keyword.")
 
                 self.bool_msg.data = True
-                self.follow_person_pub.publish(self.bool_msg)
+                # self.follow_person_pub.publish(self.bool_msg)
 
             return robot_response
         except Exception as e:

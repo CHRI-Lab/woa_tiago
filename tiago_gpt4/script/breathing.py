@@ -129,7 +129,7 @@ class BreathingExercise:
         speak_and_move(text)
         time.sleep(2)
 
-        for i in range(2):
+        for i in range(1):
             # Inhale
             
             text = "Inhale deeply through your nose, feeling your lungs expand fully. Hold your breath for a moment at the top of your inhale."
@@ -150,13 +150,15 @@ class BreathingExercise:
 
         # Inhale
         
-        text = "Inhaling deeply, filling your lungs with fresh, revitalizing air. Hold for a moment. "
+        # text = "Inhaling deeply, filling your lungs with fresh, revitalizing air. Hold for a moment. "
+        text = "Inhaling deeply. "
         speak_and_move(text, 'unfold', 0.35)
 
         time.sleep(1)  # Wait for user to hold breath
 
         # Exhale
-        text = "And exhale slowly, feeling any tightness or stress dissolve with each breath. Feel the tension melting away with each breath, leaving you refreshed and ready to tackle your tasks with renewed focus."
+        # text = "And exhale slowly, feeling any tightness or stress dissolve with each breath. Feel the tension melting away with each breath, leaving you refreshed and ready to tackle your tasks with renewed focus."
+        text = "And exhale slowly."        
         speak_and_move(text, 'lower', 0.1)
 
         text = "How do you feel?"
